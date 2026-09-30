@@ -27,6 +27,9 @@ from core.dashboard import Dashboard
 from core.simulator import CameraSimulator
 from core.database import Database
 from core.api import AquaVisionAPI
+from core.auth import AuthManager
+from core.logger import AquaLogger
+from core.camera_integration import CameraIntegration
 
 
 class AquaVision:
@@ -48,6 +51,9 @@ class AquaVision:
         self.simulator = CameraSimulator(self.config)
         self.database = Database(self.config)
         self.api = AquaVisionAPI(self, self.config)
+        self.auth = AuthManager(self.config)
+        self.logger = AquaLogger(self.config)
+        self.camera_integration = CameraIntegration(self.config)
 
         self.scan_count = 0
         self.alerts_triggered = 0
@@ -85,6 +91,11 @@ class AquaVision:
         self.dashboard.start()
         self.simulator.start()
         self.database = Database(self.config)
+        self.auth = AuthManager(self.config)
+        self.logger = AquaLogger(self.config)
+        self.camera_integration = CameraIntegration(self.config)
+        self.logger.start()
+        self.camera_integration.start()
 
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGTERM, self._signal_handler)
