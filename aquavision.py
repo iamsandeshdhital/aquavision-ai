@@ -25,6 +25,8 @@ from core.water_analyzer import WaterQualityAnalyzer
 from core.alert_system import AlertSystem, AlertLevel
 from core.dashboard import Dashboard
 from core.simulator import CameraSimulator
+from core.database import Database
+from core.api import AquaVisionAPI
 
 
 class AquaVision:
@@ -44,6 +46,8 @@ class AquaVision:
         self.alert_system = AlertSystem(self.config)
         self.dashboard = Dashboard(self.config)
         self.simulator = CameraSimulator(self.config)
+        self.database = Database(self.config)
+        self.api = AquaVisionAPI(self, self.config)
 
         self.scan_count = 0
         self.alerts_triggered = 0
@@ -80,6 +84,7 @@ class AquaVision:
         self.alert_system.start()
         self.dashboard.start()
         self.simulator.start()
+        self.database = Database(self.config)
 
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGTERM, self._signal_handler)
@@ -114,6 +119,7 @@ class AquaVision:
                 frame, camera_id, camera.location
             )
             self.dashboard.update_reading(reading)
+            self.database.save_reading(reading)
 
             if reading.contamination_detected:
                 self._check_alerts(reading)
