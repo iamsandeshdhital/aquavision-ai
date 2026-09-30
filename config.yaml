@@ -1,0 +1,107 @@
+# AquaVision AI Configuration
+# ==========================
+
+app:
+  name: "AquaVision AI"
+  version: "1.0.0"
+  debug: true
+  host: "0.0.0.0"
+  port: 8050
+
+# Water Quality Parameters
+water_quality:
+  # Color analysis thresholds (HSV)
+  color_ranges:
+    clean:
+      h: [80, 130]
+      s: [20, 100]
+      v: [100, 255]
+    algae:
+      h: [35, 85]
+      s: [50, 255]
+      v: [50, 255]
+    sediment:
+      h: [10, 30]
+      s: [30, 200]
+      v: [80, 200]
+    oil_spill:
+      h: [0, 20]
+      s: [100, 255]
+      v: [0, 100]
+    chemical:
+      h: [130, 180]
+      s: [50, 255]
+      v: [50, 255]
+
+  # Turbidity thresholds (NTU - Nephelometric Turbidity Units)
+  turbidity:
+    clean: 5
+    moderate: 20
+    high: 50
+    critical: 100
+
+  # Dissolved Oxygen thresholds (mg/L)
+  dissolved_oxygen:
+    excellent: 8
+    good: 6
+    fair: 4
+    poor: 2
+
+  # pH thresholds
+  ph:
+    acidic: 6.5
+    neutral: 7.0
+    alkaline: 8.5
+
+# Detection Settings
+detection:
+  # Minimum contour area to consider as contamination (pixels)
+  min_contour_area: 500
+  # Confidence threshold for classification
+  confidence_threshold: 0.6
+  # Frame processing rate
+  fps: 30
+  # Alert cooldown (seconds)
+  alert_cooldown: 60
+
+# Camera Sources
+cameras:
+  - name: "River Monitor 1"
+    type: "rtsp"
+    url: "rtsp://example.com/stream1"
+    location: "Main River - North Bank"
+  - name: "Reservoir Camera"
+    type: "rtsp"
+    url: "rtsp://example.com/stream2"
+    location: "City Reservoir"
+  - name: "Treatment Plant Outflow"
+    type: "rtsp"
+    url: "rtsp://example.com/stream3"
+    location: "Water Treatment Plant"
+
+# Alert Configuration
+alerts:
+  enabled: true
+  channels:
+    - "dashboard"
+    - "email"
+    - "sms"
+  recipients:
+    - name: "Water Quality Manager"
+      email: "water@city.gov"
+      phone: "+1234567890"
+    - name: "Environmental Officer"
+      email: "env@city.gov"
+      phone: "+1234567891"
+
+# Dashboard
+dashboard:
+  refresh_rate_seconds: 5
+  map_enabled: true
+  historical_days: 30
+
+# Database
+database:
+  type: "sqlite"
+  path: "data/aquavision.db"
+  backup_interval_hours: 24
